@@ -64,11 +64,11 @@ handler._users.post = (requestProperties, callback) => {
       ? requestProperties.body.phone
       : false;
 
-  //   const password =
-  //     typeof requestProperties.body.password === "string" &&
-  //     requestProperties.body.password.trim().length > 0
-  //       ? requestProperties.body.password
-  //       : false;
+  const password =
+    typeof requestProperties.body.password === "string" &&
+    requestProperties.body.password.trim().length > 0
+      ? requestProperties.body.password
+      : false;
 
   const tosAgreement =
     typeof requestProperties.body.tosAgreement === "boolean" &&
@@ -76,7 +76,7 @@ handler._users.post = (requestProperties, callback) => {
       ? requestProperties.body.tosAgreement
       : false;
 
-  if (firstName && lastName && phone && tosAgreement) {
+  if (firstName && lastName && phone && tosAgreement && password) {
     // read the data and find the user if not exist
     data.read("users", phone, (err1) => {
       if (err1) {
@@ -84,11 +84,11 @@ handler._users.post = (requestProperties, callback) => {
           firstName,
           lastName,
           phone,
-          //   password: hash(password),
+          password: hash(password),
           tosAgreement,
         };
         // store the user to db
-        data.create("users", phone, userObject, (err2) => {
+        data.create("users", phone, password, userObject, (err2) => {
           if (!err2) {
             callback(200, {
               message: "User created successfully!",

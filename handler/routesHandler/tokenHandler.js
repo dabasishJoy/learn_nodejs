@@ -30,11 +30,11 @@ handler._token.post = (requestProperties, callback) => {
     requestProperties.body.password.trim().length > 0
       ? requestProperties.body.password
       : false;
-  if (phone & password) {
-    data.read("users", password, (err1, userData) => {
+  if (phone && password) {
+    data.read("users", phone, (err1, userData) => {
       const hashedpassword = hash(password);
       if (hashedpassword === parseJSON(userData).password) {
-        const tokenId = createRandomString(11);
+        const tokenId = createRandomString(20);
         const expires = Date.now() + 60 * 60 * 1000;
         const tokenObject = {
           phone,
@@ -54,7 +54,7 @@ handler._token.post = (requestProperties, callback) => {
         });
       } else {
         callback(400, {
-          error: "Phone is not valid!",
+          error: "Password is not valid!",
         });
       }
     });
