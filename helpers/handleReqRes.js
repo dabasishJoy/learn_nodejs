@@ -41,17 +41,6 @@ handler.handleReqRes = (req, res) => {
   //   find out the path
   const choosenHandler = routes[trimPath] ? routes[trimPath] : notFoundHandler;
 
-  choosenHandler(requestProperties, (statusCode, payload) => {
-    statusCode = typeof statusCode === "number" ? statusCode : 500;
-    payload = typeof payload === "object" ? payload : {};
-
-    const payloadString = JSON.stringify(payload);
-
-    // return the final response
-    res.writeHead(statusCode);
-    res.end(payloadString);
-  });
-
   let data = "";
   // get the data from buffer usig event
   req.on("data", (buffer) => {
@@ -61,7 +50,17 @@ handler.handleReqRes = (req, res) => {
   // end the buffer
   req.on("end", () => {
     data += decoder.end();
-    res.end("Hello World");
+
+    choosenHandler(requestProperties, (statusCode, payload) => {
+      statusCode = typeof statusCode === "number" ? statusCode : 500;
+      payload = typeof payload === "object" ? payload : {};
+
+      const payloadString = JSON.stringify(payload);
+
+      // return the final response
+      res.writeHead(statusCode);
+      res.end(payloadString);
+    });
   });
 };
 
