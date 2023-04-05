@@ -1,5 +1,5 @@
 const data = require("../../lib/data");
-const { hash } = require("../../helpers/utilities");
+const { parseJSON } = require("../../helpers/utilities");
 
 const handler = {};
 
@@ -18,8 +18,30 @@ handler._users = {};
 
 // get request
 handler._users.get = (requestProperties, callback) => {
-  console.log(requestProperties);
-  callback(200);
+  // check phone number first because considering that unique key
+  const phone =
+    typeof requestProperties.queryString.phone === "string" &&
+    requestProperties.queryString.phone.trim().length === 11
+      ? requestProperties.queryString.phone
+      : false;
+  if (phone) {
+    // lookup the user
+    data.read("users", phone, (err, u) => {
+      const user = { ...parseJSON(u) };
+      if (!err && user) {
+        delete user.password;
+        callback(200, user);
+      } else {
+        callback(404, {
+          error: "Requested user was not found!",
+        });
+      }
+    });
+  } else {
+    callback(404, {
+      error: "Requested user was not found!",
+    });
+  }
 };
 // post request / create user
 handler._users.post = (requestProperties, callback) => {
@@ -88,7 +110,70 @@ handler._users.post = (requestProperties, callback) => {
   }
 };
 // put request
-handler._users.put = (requestProperties, callback) => {};
+handler._users.put = (requestProperties, callback) => {
+  // find unique user with phone number
+  // check the phone number if valid
+  const phone =
+    typeof requestProperties.body.phone === "string" &&
+    requestProperties.body.phone.trim().length === 11
+      ? requestProperties.body.phone
+      : false;
+
+  const firstName =
+    typeof requestProperties.body.firstName === "string" &&
+    requestProperties.body.firstName.trim().length > 0
+      ? requestProperties.body.firstName
+      : false;
+
+  const lastName =
+    typeof requestProperties.body.lastName === "string" &&
+    requestProperties.body.lastName.trim().length > 0
+      ? requestProperties.body.lastName
+      : false;
+
+  if (phone) {
+    if (firstName || lastName) {
+      // loopkup the user
+      data.read("users", phone, (err1, uData) => {
+        const userData = { ...parseJSON(uData) };
+
+        if (!err1 && userData) {
+          if (firstName) {
+            userData.firstName = firstName;
+          }
+          if (lastName) {
+            userData.firstName = firstName;
+          }
+
+          // store to database
+          data.update("users", phone, userData, (err2) => {
+            if (!err2) {
+              callback(200, {
+                message: "User was updated successfully!",
+              });
+            } else {
+              callback(500, {
+                error: "There was a problem in the server side!",
+              });
+            }
+          });
+        } else {
+          callback(400, {
+            error: "You have a problem in your request!",
+          });
+        }
+      });
+    } else {
+      callback(400, {
+        error: "You have a problem in your request!",
+      });
+    }
+  } else {
+    callback(400, {
+      error: "Invalid phone number. Please try again!",
+    });
+  }
+};
 // delete request
 
 handler._users.delete = (requestProperties, callback) => {};
