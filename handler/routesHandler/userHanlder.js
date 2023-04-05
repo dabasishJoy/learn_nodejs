@@ -1,5 +1,6 @@
 const data = require("../../lib/data");
 const { parseJSON } = require("../../helpers/utilities");
+const { hash } = require("../../helpers/utilities");
 
 const handler = {};
 
@@ -78,6 +79,7 @@ handler._users.post = (requestProperties, callback) => {
 
   if (firstName && lastName && phone && tosAgreement && password) {
     // read the data and find the user if not exist
+    console.log("HEre");
     data.read("users", phone, (err1) => {
       if (err1) {
         const userObject = {
@@ -88,7 +90,7 @@ handler._users.post = (requestProperties, callback) => {
           tosAgreement,
         };
         // store the user to db
-        data.create("users", phone, password, userObject, (err2) => {
+        data.create("users", phone, userObject, (err2) => {
           if (!err2) {
             callback(200, {
               message: "User created successfully!",
