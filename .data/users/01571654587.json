@@ -1,1 +1,7 @@
-{"firstName":"Dabsish","lastName":"Joy","phone":"01571654587","password":"7e78a6cfe48f4b9958a3b92c66ddd1e93e3a07d1547b50a90cdcc46ebf82680b","tosAgreement":true}
+{
+  "firstName": "Dabsish",
+  "lastName": "Joy",
+  "phone": "01571654587",
+  "password": "7e78a6cfe48f4b9958a3b92c66ddd1e93e3a07d1547b50a90cdcc46ebf82680b",
+  "tosAgreement": true
+}

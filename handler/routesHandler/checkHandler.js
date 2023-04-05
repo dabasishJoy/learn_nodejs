@@ -2,6 +2,7 @@ const data = require("../../lib/data");
 const { parseJSON, createRandomString } = require("../../helpers/utilities");
 const tokenHandler = require("./tokenHandler");
 const { maxChecks } = require("../../helpers/environments");
+console.log("🚀 ~ file: checkHandler.js:5 ~ maxChecks:", maxChecks);
 
 // module scaffolding
 const handler = {};
@@ -72,7 +73,7 @@ handler._check.post = (requestProperties, callback) => {
                   userObject.checks instanceof Array
                     ? userObject.checks
                     : [];
-
+                console.log(maxChecks);
                 if (userChecks.length < maxChecks) {
                   const checkId = createRandomString(20);
                   const checkObject = {
@@ -110,7 +111,7 @@ handler._check.post = (requestProperties, callback) => {
                   });
                 } else {
                   callback(401, {
-                    error: "Userhas already reached max check limit!",
+                    error: "User already reached max check limit!",
                   });
                 }
               } else {
@@ -140,9 +141,9 @@ handler._check.post = (requestProperties, callback) => {
 
 handler._check.get = (requestProperties, callback) => {
   const id =
-    typeof requestProperties.queryString.id === "string" &&
-    requestProperties.queryString.id.trim().length === 20
-      ? requestProperties.queryString.id
+    typeof requestProperties.queryStringObject.id === "string" &&
+    requestProperties.queryStringObject.id.trim().length === 20
+      ? requestProperties.queryStringObject.id
       : false;
 
   if (id) {
