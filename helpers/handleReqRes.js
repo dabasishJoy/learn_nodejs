@@ -3,7 +3,7 @@ const url = require("url");
 const { StringDecoder } = require("string_decoder");
 const routes = require("../routes");
 const { notFoundHandler } = require("../handler/routesHandler/notFoundHandler");
-
+const { parseJSON } = require("../helpers/utilities");
 // module scaffolding
 const handler = {};
 
@@ -52,7 +52,7 @@ handler.handleReqRes = (req, res) => {
     data += decoder.end();
 
     // adding data to req properties to get in the req handler
-    requestProperties.body = data;
+    requestProperties.body = parseJSON(data);
 
     choosenHandler(requestProperties, (statusCode, payload) => {
       statusCode = typeof statusCode === "number" ? statusCode : 500;

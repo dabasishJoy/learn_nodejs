@@ -1,3 +1,6 @@
+const data = require("../../lib/data");
+const { hash } = require("../../helpers/utilities");
+
 const handler = {};
 
 handler.userHandler = (requestProperties, callback) => {
@@ -39,11 +42,11 @@ handler._users.post = (requestProperties, callback) => {
       ? requestProperties.body.phone
       : false;
 
-  const password =
-    typeof requestProperties.body.password === "string" &&
-    requestProperties.body.password.trim().length > 0
-      ? requestProperties.body.password
-      : false;
+  //   const password =
+  //     typeof requestProperties.body.password === "string" &&
+  //     requestProperties.body.password.trim().length > 0
+  //       ? requestProperties.body.password
+  //       : false;
 
   const tosAgreement =
     typeof requestProperties.body.tosAgreement === "boolean" &&
@@ -51,15 +54,15 @@ handler._users.post = (requestProperties, callback) => {
       ? requestProperties.body.tosAgreement
       : false;
 
-  if (firstName && lastName && phone && password && tosAgreement) {
-    // make sure that the user doesn't already exists
+  if (firstName && lastName && phone && tosAgreement) {
+    // read the data and find the user if not exist
     data.read("users", phone, (err1) => {
       if (err1) {
         const userObject = {
           firstName,
           lastName,
           phone,
-          password: hash(password),
+          //   password: hash(password),
           tosAgreement,
         };
         // store the user to db
