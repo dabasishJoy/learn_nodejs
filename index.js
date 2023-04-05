@@ -7,30 +7,30 @@ const data = require("./lib/data");
 //module scafolding - creating an app object
 const app = {};
 
-// testing filesystem
-data.create(
-  "test",
-  "newFile",
-  { name: "Dabasish", lastname: "Das", Role: "Operational" },
-  (err) => {
-    console.log("The error", err);
-  }
-);
+// // testing filesystem
+// data.create(
+//   "test",
+//   "newFile",
+//   { name: "Dabasish", lastname: "Das", Role: "Operational" },
+//   (err) => {
+//     console.log("The error", err);
+//   }
+// );
 
-// update
-data.update(
-  "test",
-  "newFile",
-  { name: "Dabasish", lastname: "Joy", Role: "Operational" },
-  (err) => {
-    console.log("The error", err);
-  }
-);
+// // update
+// data.update(
+//   "test",
+//   "newFile",
+//   { name: "Dabasish", lastname: "Joy", Role: "Operational" },
+//   (err) => {
+//     console.log("The error", err);
+//   }
+// );
 
-// delete file
-data.delete("test", "newFile", (err) => {
-  console.log("The error", err);
-});
+// // delete file
+// data.delete("test", "newFile", (err) => {
+//   console.log("The error", err);
+// });
 // crete server method
 app.createServer = () => {
   // creating server using http module

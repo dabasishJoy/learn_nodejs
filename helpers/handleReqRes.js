@@ -51,6 +51,9 @@ handler.handleReqRes = (req, res) => {
   req.on("end", () => {
     data += decoder.end();
 
+    // adding data to req properties to get in the req handler
+    requestProperties.body = data;
+
     choosenHandler(requestProperties, (statusCode, payload) => {
       statusCode = typeof statusCode === "number" ? statusCode : 500;
       payload = typeof payload === "object" ? payload : {};
